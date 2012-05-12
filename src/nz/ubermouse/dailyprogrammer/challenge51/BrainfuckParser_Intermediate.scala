@@ -13,10 +13,13 @@ object BrainfuckParser_Intermediate {
   var cells                  = Array.fill(MEMORY_SIZE)(0)
   val parserFunctionMappings = Map(">" -> ((ptr: Int) => ptr + 1),
                                    "<" -> ((ptr: Int) => ptr - 1),
-                                   "-" -> ((ptr: Int) => {cells(ptr) += 1; ptr}),
-                                   "+" -> ((ptr: Int) => {cells(ptr) -= 1; ptr}))
+                                   "-" -> ((ptr: Int) => {cells(ptr) -= 1; ptr}),
+                                   "+" -> ((ptr: Int) => {cells(ptr) += 1; ptr}))
 
-  def apply(code: String) = parse(code.replaceAll(" ", ""))
+  def apply(code: String) = {
+    cells = Array.fill(MEMORY_SIZE)(0)
+    parse(code.replaceAll(" ", ""))
+  }
 
   private def parse(code: String, ptr: Int = 0):Int = {
     if (code.length == 1) parserFunctionMappings(code)(ptr)
