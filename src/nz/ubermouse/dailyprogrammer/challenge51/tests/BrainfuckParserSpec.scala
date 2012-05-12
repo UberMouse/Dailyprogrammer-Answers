@@ -1,6 +1,7 @@
 package nz.ubermouse.dailyprogrammer.challenge51.tests
 
 import org.scalatest.WordSpec
+import nz.ubermouse.dailyprogrammer.challenge51.{BrainfuckParser_Intermediate => BrainfuckParser}
 
 /**
  * Created by IntelliJ IDEA.
@@ -15,19 +16,51 @@ class BrainfuckParserSpec extends WordSpec {
 
   "The Brainfuck Parser" should support {
     "incrementing the Data Pointer with >" in {
-      pending
+      expect(1) {
+        BrainfuckParser(">+")
+        BrainfuckParser.cells(1)
+      }
+
+      expect(1) {
+        BrainfuckParser(">>>>>+")
+        BrainfuckParser.cells(5)
+      }
     }
 
     "decrementing the Data Pointer with <" in {
-      pending
+      expect(1) {
+        BrainfuckParser(">><+")
+        BrainfuckParser.cells(1)
+      }
+
+      expect(1) {
+        BrainfuckParser(">>>>>>><<+")
+        BrainfuckParser.cells(5)
+      }
     }
 
     "incrementing the byte at the current Data Pointer with +" in {
-      pending
+      expect(1) {
+        BrainfuckParser("+")
+        BrainfuckParser.cells(0)
+      }
+
+      expect(5) {
+        BrainfuckParser("+++++")
+        BrainfuckParser.cells(0)
+      }
     }
 
     "decerementing the byte at the current Data Pointer with -" in {
-      pending
+      expect(-1) {
+        BrainfuckParser("-")
+        BrainfuckParser.cells(0)
+      }
+
+      expect(-5) {
+        BrainfuckParser("-----")
+        BrainfuckParser.cells(0)
+      }
     }
 
     "the ability to output an ASCII character using the value the current DataPointer refers to with ." in {
