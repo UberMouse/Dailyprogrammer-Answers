@@ -14,7 +14,8 @@ object BrainfuckParser_Intermediate {
   val parserFunctionMappings = Map(">" -> ((ptr: Int) => ptr + 1),
                                    "<" -> ((ptr: Int) => ptr - 1),
                                    "-" -> ((ptr: Int) => {cells(ptr) -= 1; ptr}),
-                                   "+" -> ((ptr: Int) => {cells(ptr) += 1; ptr}))
+                                   "+" -> ((ptr: Int) => {cells(ptr) += 1; ptr}),
+                                   "." -> ((ptr: Int) => {print(Character.toString(ptr.asInstanceOf[Char])); ptr}))
 
   def apply(code: String) = {
     cells = Array.fill(MEMORY_SIZE)(0)

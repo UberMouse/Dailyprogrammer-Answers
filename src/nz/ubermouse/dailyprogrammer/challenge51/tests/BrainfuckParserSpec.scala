@@ -2,6 +2,8 @@ package nz.ubermouse.dailyprogrammer.challenge51.tests
 
 import org.scalatest.WordSpec
 import nz.ubermouse.dailyprogrammer.challenge51.{BrainfuckParser_Intermediate => BrainfuckParser}
+import java.io.{OutputStream, PrintStream}
+import collection.mutable.ListBuffer
 
 /**
  * Created by IntelliJ IDEA.
@@ -13,6 +15,19 @@ import nz.ubermouse.dailyprogrammer.challenge51.{BrainfuckParser_Intermediate =>
 class BrainfuckParserSpec extends WordSpec {
 
   val support = afterWord("Support")
+  val outStream = new OutputStream() {
+    override def write(b: Int) {
+      output += String.valueOf(b.asInstanceOf[Char])
+    }
+    override def write(b:Array[Byte], off:Int, len:Int) {
+      output += new String(b, off, len)
+    }
+    override def write(b:Array[Byte]) {
+      write(b, 0, b.length)
+    }
+  }
+  val output = new ListBuffer[String]
+  Console.setOut(outStream)
 
   "The Brainfuck Parser" should support {
     "incrementing the Data Pointer with >" in {
@@ -47,7 +62,7 @@ class BrainfuckParserSpec extends WordSpec {
       }
     }
 
-    "decreementing the byte at the current Data Pointer with -" in {
+    "decrementing the byte at the current Data Pointer with -" in {
       expect(-1) {
         BrainfuckParser("-")
         BrainfuckParser.cells(0)
@@ -60,7 +75,10 @@ class BrainfuckParserSpec extends WordSpec {
     }
 
     "the ability to output an ASCII character using the value the current DataPointer refers to with ." in {
-      pending
+      expect("!") {
+        BrainfuckParser("+++++++++++++++++++++++++++++++++.")
+        output(0)
+      }
     }
 
     "the ability to store a byte of input at the current Data Pointer with ," in {
