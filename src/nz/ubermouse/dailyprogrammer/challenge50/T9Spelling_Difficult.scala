@@ -7,8 +7,7 @@ package nz.ubermouse.dailyprogrammer.challenge50
  * Time: 6:11 PM
  */
 
-object T9Spelling_Difficult
-{
+object T9Spelling_Difficult {
 
   val mappings = Map("a" -> "2",
                      "b" -> "22",
@@ -38,23 +37,19 @@ object T9Spelling_Difficult
                      "z" -> "9999",
                      " " -> "0")
 
-  def char2group(char:String) =
-  {
+  def char2group(char: String) = {
     if (mappings.contains(char)) mappings(char).substring(0, 1)
     else "-1"
   }
 
-  def parse(s: String, prevGroup: String = ""): String =
-  {
-    if (s.length == 1)
-    {
+  def parse(s: String, prevGroup: String = ""): String = {
+    if (s.length == 1) {
       if (mappings.contains(s))
         (if (char2group(s) == prevGroup) " " else "") + mappings(s)
       else
         s
     }
-    else
-    {
+    else {
       val substring = s.substring(0, 1)
       parse(substring, prevGroup) + parse(s.substring(1), char2group(substring))
     }
