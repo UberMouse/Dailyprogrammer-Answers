@@ -76,7 +76,14 @@ class BrainfuckParserSpec extends WordSpec {
 
     "the ability to output an ASCII character using the value the current DataPointer refers to with ." in {
       expect("!") {
+        output.clear()
         BrainfuckParser("+++++++++++++++++++++++++++++++++.")
+        output(0)
+      }
+
+      expect("0") {
+        output.clear()
+        BrainfuckParser("++++++++++++++++++++++++++++++++++++++++++++++++.")
         output(0)
       }
     }
