@@ -15,7 +15,8 @@ object BrainfuckParser_Intermediate {
                                    "<" -> ((ptr: Int) => ptr - 1),
                                    "-" -> ((ptr: Int) => {cells(ptr) -= 1; ptr}),
                                    "+" -> ((ptr: Int) => {cells(ptr) += 1; ptr}),
-                                   "." -> ((ptr: Int) => {print(String.valueOf(cells(ptr).asInstanceOf[Char])); ptr}))
+                                   "." -> ((ptr: Int) => {print(String.valueOf(cells(ptr).asInstanceOf[Char])); ptr}),
+                                   "," -> ((ptr: Int) => {cells(ptr) = readChar().asInstanceOf[Int]; ptr}))
 
   def apply(code: String) = {
     cells = Array.fill(MEMORY_SIZE)(0)
