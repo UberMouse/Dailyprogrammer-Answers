@@ -2,8 +2,8 @@ package nz.ubermouse.dailyprogrammer.challenge51.tests
 
 import org.scalatest.WordSpec
 import nz.ubermouse.dailyprogrammer.challenge51.{BrainfuckParser_Intermediate => BrainfuckParser}
-import java.io.{OutputStream, PrintStream}
-import collection.mutable.ListBuffer
+import java.io.{InputStream, OutputStream, PrintStream}
+import collection.mutable.{Queue, ListBuffer}
 
 /**
  * Created by IntelliJ IDEA.
@@ -26,8 +26,18 @@ class BrainfuckParserSpec extends WordSpec {
       write(b, 0, b.length)
     }
   }
+  val inputStream = new InputStream {
+
+    val inputQueue = new Queue[Byte]()
+    inputQueue += 33
+    inputQueue += 48
+
+    def read() = inputQueue.dequeue()
+  }
   val output = new ListBuffer[String]
   Console.setOut(outStream)
+  Console.setIn(inputStream)
+
 
   "The Brainfuck Parser" should support {
     "incrementing the Data Pointer with >" in {
@@ -89,7 +99,17 @@ class BrainfuckParserSpec extends WordSpec {
     }
 
     "the ability to store a byte of input at the current Data Pointer with ," in {
-      pending
+      expect("!") {
+        output.clear()
+        BrainfuckParser(",.")
+        output(0)
+      }
+
+      expect("0") {
+        output.clear()
+        BrainfuckParser(",.")
+        output(0)
+      }
     }
 
     "forward command jumping to after the next ] with [ on a 0 byte pointer" in {
