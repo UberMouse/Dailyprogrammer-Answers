@@ -131,14 +131,22 @@ class BrainfuckParserSpec extends WordSpec {
         BrainfuckParser.cells(0)
       }
 
-      expect(3) {
-        BrainfuckParser("[+++++]++[++]+")
+      expect(5) {
+        BrainfuckParser("[+++++]++[++>]<+")
         BrainfuckParser.cells(0)
       }
     }
 
     "backward command jumping to the previous [ with ] on a positive byte pointer" in {
-      pending
+      expect(11) {
+        BrainfuckParser("+>++[<+++++>-]+")
+        BrainfuckParser.cells(0)
+      }
+
+      expect(8) {
+        BrainfuckParser("+>++[<+++++>-]++>+++[<++>-]+")
+        BrainfuckParser.cells(1)
+      }
     }
   }
 

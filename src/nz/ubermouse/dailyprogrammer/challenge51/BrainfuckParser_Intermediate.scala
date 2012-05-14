@@ -32,11 +32,11 @@ object BrainfuckParser_Intermediate {
                                      (ptr, offset)
                                    }),
                                    "[" -> ((ptr: Int, offset: Int) => {
-                                     if (ptr == 0) (ptr, jumps(offset))
+                                     if (cells(ptr) == 0) (ptr, jumps(offset))
                                      else (ptr, offset)
                                    }),
                                    "]" -> ((ptr: Int, offset: Int) => {
-                                     if (ptr != 0) (ptr, jumps(offset))
+                                     if (cells(ptr) != 0) (ptr, jumps(offset))
                                      else (ptr, offset)
                                    }))
   var jumps: Map[Int, Int]   = new HashMap[Int, Int]
