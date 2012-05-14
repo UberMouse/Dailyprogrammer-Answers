@@ -38,7 +38,7 @@ class BrainfuckParserSpec extends WordSpec {
     override def read(b:Array[Byte], offset:Int, len:Int) = read()
   }
   val output = new ListBuffer[String]
-  //Console.setOut(outStream)
+  Console.setOut(outStream)
   Console.setIn(inputStream)
 
 

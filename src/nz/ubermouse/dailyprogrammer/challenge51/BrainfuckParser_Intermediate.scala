@@ -13,28 +13,31 @@ object BrainfuckParser_Intermediate {
 
   val MEMORY_SIZE            = 64000
   var cells                  = Array.fill(MEMORY_SIZE)(0)
-  val parserFunctionMappings = Map(">" -> ((ptr: Int, offset:Int) => (ptr + 1, offset)),
-                                   "<" -> ((ptr: Int, offset:Int) => (ptr - 1, offset)),
-                                   "-" -> ((ptr: Int, offset:Int) => {
+  val parserFunctionMappings = Map(">" -> ((ptr: Int, offset: Int) => (ptr + 1, offset)),
+                                   "<" -> ((ptr: Int, offset: Int) => (ptr - 1, offset)),
+                                   "-" -> ((ptr: Int, offset: Int) => {
                                      cells(ptr) -= 1;
                                      (ptr, offset)
                                    }),
-                                   "+" -> ((ptr: Int, offset:Int) => {
+                                   "+" -> ((ptr: Int, offset: Int) => {
                                      cells(ptr) += 1;
                                      (ptr, offset)
                                    }),
-                                   "." -> ((ptr: Int, offset:Int) => {
+                                   "." -> ((ptr: Int, offset: Int) => {
                                      print(String.valueOf(cells(ptr).asInstanceOf[Char]));
                                      (ptr, offset)
                                    }),
-                                   "," -> ((ptr: Int, offset:Int) => {
+                                   "," -> ((ptr: Int, offset: Int) => {
                                      cells(ptr) = readChar().asInstanceOf[Int];
                                      (ptr, offset)
                                    }),
-                                   "[" -> ((ptr: Int, offset:Int) => {
-                                     if (ptr == 0)
-                                       (ptr, jumps(offset))
-                                     (ptr, offset)
+                                   "[" -> ((ptr: Int, offset: Int) => {
+                                     if (ptr == 0) (ptr, jumps(offset))
+                                     else (ptr, offset)
+                                   }),
+                                   "]" -> ((ptr: Int, offset: Int) => {
+                                     if (ptr != 0) (ptr, jumps(offset))
+                                     else (ptr, offset)
                                    }))
   var jumps: Map[Int, Int]   = new HashMap[Int, Int]
 
@@ -70,7 +73,6 @@ object BrainfuckParser_Intermediate {
   def apply(code: String) = {
     jumps = findJumps(code)
     cells = Array.fill(MEMORY_SIZE)(0)
-    //println(code, code.length)
     parse(code.replaceAll(" ", ""))
   }
 
