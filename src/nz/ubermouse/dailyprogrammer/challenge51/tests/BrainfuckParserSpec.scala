@@ -14,7 +14,7 @@ import collection.mutable.{Queue, ListBuffer}
 
 class BrainfuckParserSpec extends WordSpec {
 
-  val support = afterWord("Support")
+  val support = afterWord("support")
   val outStream = new OutputStream() {
     override def write(b: Int) {
       output += String.valueOf(b.asInstanceOf[Char])
@@ -38,7 +38,7 @@ class BrainfuckParserSpec extends WordSpec {
     override def read(b:Array[Byte], offset:Int, len:Int) = read()
   }
   val output = new ListBuffer[String]
-  Console.setOut(outStream)
+  //Console.setOut(outStream)
   Console.setIn(inputStream)
 
 
@@ -103,22 +103,38 @@ class BrainfuckParserSpec extends WordSpec {
 
     "the ability to store a byte of input at the current Data Pointer with ," in {
       expect("!") {
-        //output.clear()
         //BrainfuckParser(",.")
         //output(0)
         pending
       }
 
       expect("0") {
-        //output.clear()
         //BrainfuckParser(",.")
         //output(0)
         pending
       }
     }
 
+    "being able to find all jump points in the code" in {
+      expect(Map(6 -> 2, 2 -> 6)) {
+        BrainfuckParser.findJumps("++[++-]--")
+      }
+
+      expect(Map(24 -> 19, 16 -> 8, 11 -> 15, 8 -> 16, 19 -> 24, 15 -> 11)) {
+        BrainfuckParser.findJumps(">>+<-->+[++[-->]]--[<<<+]")
+      }
+    }
+
     "forward command jumping to after the next ] with [ on a 0 byte pointer" in {
-      pending
+      expect(1) {
+        BrainfuckParser("[+++++]+")
+        BrainfuckParser.cells(0)
+      }
+
+      expect(3) {
+        BrainfuckParser("[+++++]++[++]+")
+        BrainfuckParser.cells(0)
+      }
     }
 
     "backward command jumping to the previous [ with ] on a positive byte pointer" in {

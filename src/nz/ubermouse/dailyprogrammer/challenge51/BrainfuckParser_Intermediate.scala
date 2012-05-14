@@ -31,16 +31,33 @@ object BrainfuckParser_Intermediate {
                                      cells(ptr) = readChar().asInstanceOf[Int];
                                      ptr
                                    }))
-  var jumps = new HashMap[(String, Int), Int]
+  var jumps: Map[Int, Int]   = new HashMap[Int, Int]
 
-  def findJumps(code: String): HashMap[(String, Int), Int] = {
-    var map = new HashMap[(String, Int), Int]
+  def findJumps(code: String): Map[Int, Int] = {
+    var map = new HashMap[Int, Int]
+    def findMatchingJump(index: Int, offset: Int = 0): Int = {
+      String.valueOf(code(index)) match {
+        case "[" => {
+          val nextLeftBracket = code.indexOf("[", index + offset + 1)
+          val nextRightBracket = code.indexOf("]", index + offset + 1)
+          if (nextLeftBracket > nextRightBracket || nextLeftBracket == -1)
+            nextRightBracket
+          else
+            findMatchingJump(index, nextRightBracket - index)
+        }
+        case "]" => {
+          for((k, v) <- map) {
+            if (v == index)
+              return k
+          }
+          -1
+        }
+      }
+    }
     for (i <- 0 until code.length) {
       val char = code(i)
-      if(char == "[")
-        map += ("[", i) -> code.indexOf("[", i)
-      else if (char == "]")
-        map += ("]", i) -> map.last
+      if (String.valueOf(char) == "[") map += i -> findMatchingJump(i)
+      else if (String.valueOf(char) == "]") map += i -> findMatchingJump(i)
     }
     map
   }
@@ -53,7 +70,7 @@ object BrainfuckParser_Intermediate {
   }
 
   private def parse(code: String, offset: Int = 0, ptr: Int = 0): Int = {
-      if (code.length == 1 || code.length-1 == offset) parserFunctionMappings(String.valueOf(code.last))(ptr)
-      else parse(code, offset + 1, parse(code.substring(offset, offset + 1), 0, ptr))
+    if (code.length == 1 || code.length - 1 == offset) parserFunctionMappings(String.valueOf(code.last))(ptr)
+    else parse(code, offset + 1, parse(code.substring(offset, offset + 1), 0, ptr))
   }
 }
