@@ -45,21 +45,21 @@ class BrainfuckParserSpec extends WordSpec {
   "The Brainfuck Parser" should support {
     "incrementing the Data Pointer with >" in {
       expect(1) {
-        BrainfuckParser(">")
+        BrainfuckParser(">")._1
       }
 
       expect(5) {
-        BrainfuckParser(">>>>>")
+        BrainfuckParser(">>>>>")._1
       }
     }
 
     "decrementing the Data Pointer with <" in {
       expect(1) {
-        BrainfuckParser(">><")
+        BrainfuckParser(">><")._1
       }
 
       expect(5) {
-        BrainfuckParser(">>>>>>><<")
+        BrainfuckParser(">>>>>>><<")._1
       }
     }
 
