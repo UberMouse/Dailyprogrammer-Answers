@@ -1,9 +1,9 @@
-package nz.ubermouse.dailyprogrammer.challenge51.tests
+package nz.ubermouse.dailyprogrammer.challenge51.intermediate.tests
 
 import org.scalatest.WordSpec
-import nz.ubermouse.dailyprogrammer.challenge51.{BrainfuckParser_Intermediate => BrainfuckParser}
 import java.io.{InputStream, OutputStream, PrintStream}
 import collection.mutable.{Queue, ListBuffer}
+import nz.ubermouse.dailyprogrammer.challenge51.intermediate.{BrainfuckInterpreter => BrainfuckParser}
 
 /**
  * Created by IntelliJ IDEA.
@@ -14,15 +14,17 @@ import collection.mutable.{Queue, ListBuffer}
 
 class BrainfuckParserSpec extends WordSpec {
 
-  val support = afterWord("support")
-  val outStream = new OutputStream() {
+  val support     = afterWord("support")
+  val outStream   = new OutputStream() {
     override def write(b: Int) {
       output += String.valueOf(b.asInstanceOf[Char])
     }
-    override def write(b:Array[Byte], off:Int, len:Int) {
+
+    override def write(b: Array[Byte], off: Int, len: Int) {
       output += new String(b, off, len)
     }
-    override def write(b:Array[Byte]) {
+
+    override def write(b: Array[Byte]) {
       write(b, 0, b.length)
     }
   }
@@ -34,10 +36,11 @@ class BrainfuckParserSpec extends WordSpec {
 
     def read() = inputQueue.dequeue()
 
-    override def read(b:Array[Byte]) = read()
-    override def read(b:Array[Byte], offset:Int, len:Int) = read()
+    override def read(b: Array[Byte]) = read()
+
+    override def read(b: Array[Byte], offset: Int, len: Int) = read()
   }
-  val output = new ListBuffer[String]
+  val output      = new ListBuffer[String]
   Console.setIn(inputStream)
 
 
@@ -76,14 +79,14 @@ class BrainfuckParserSpec extends WordSpec {
 
     "decrementing the byte at the current Data Pointer with -" in {
       expect(-1) {
-        BrainfuckParser("-")
-        BrainfuckParser.cells(0)
-      }
+       BrainfuckParser("-")
+       BrainfuckParser.cells(0)
+     }
 
       expect(-5) {
-        BrainfuckParser("-----")
-        BrainfuckParser.cells(0)
-      }
+       BrainfuckParser("-----")
+       BrainfuckParser.cells(0)
+     }
     }
 
     "the ability to output an ASCII character using the value the current DataPointer refers to with ." in {
@@ -123,7 +126,8 @@ class BrainfuckParserSpec extends WordSpec {
       }
 
       expect(Map(24 -> 19, 16 -> 8, 11 -> 15, 8 -> 16, 19 -> 24, 15 -> 11)) {
-        BrainfuckParser.findJumps(">>+<-->+[++[-->]]--[<<<+]")
+        BrainfuckParser
+        .findJumps(">>+<-->+[++[-->]]--[<<<+]")
       }
     }
 
@@ -141,9 +145,9 @@ class BrainfuckParserSpec extends WordSpec {
 
     "backward command jumping to the previous [ with ] on a positive byte pointer" in {
       expect(11) {
-        BrainfuckParser("+>++[<+++++>-]+")
-        BrainfuckParser.cells(0)
-      }
+       BrainfuckParser("+>++[<+++++>-]+")
+       BrainfuckParser.cells(0)
+     }
 
       expect(8) {
         BrainfuckParser("+>++[<+++++>-]++>+++[<++>-]+")

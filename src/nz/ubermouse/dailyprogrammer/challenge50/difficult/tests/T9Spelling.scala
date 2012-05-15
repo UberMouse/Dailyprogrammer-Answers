@@ -1,6 +1,6 @@
-package nz.ubermouse.dailyprogrammer.challenge50.tests
+package nz.ubermouse.dailyprogrammer.challenge50.difficult.tests
 
-import nz.ubermouse.dailyprogrammer.challenge50.T9Spelling_Difficult
+import nz.ubermouse.dailyprogrammer.challenge50.difficult.T9Spelling
 import org.scalatest.WordSpec
 
 /**
@@ -17,22 +17,22 @@ class T9Spelling extends WordSpec {
       val testString = "hello world"
       val result = "4433555 555666096667775553"
       expect(result) {
-        T9Spelling_Difficult.parse(testString)
-      }
+                       T9Spelling.parse(testString)
+                     }
     }
 
     "accept non alphabetical characters in the input" in {
       val testString = "sup son!11!"
       val result = "777788707777666 66!11!"
       expect(result) {
-                       T9Spelling_Difficult.parse(testString)
+                       T9Spelling.parse(testString)
                      }
     }
     "insert a space between characters of the same number group" in {
       val testString = "ss aa def"
       val result = "7777 777702 203 33 333"
       expect(result) {
-                       T9Spelling_Difficult.parse(testString)
+                       T9Spelling.parse(testString)
                      }
     }
   }

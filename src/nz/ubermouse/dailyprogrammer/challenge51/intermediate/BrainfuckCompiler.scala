@@ -1,4 +1,4 @@
-package nz.ubermouse.dailyprogrammer.challenge51
+package nz.ubermouse.dailyprogrammer.challenge51.intermediate
 
 /**
  * Created by IntelliJ IDEA.
@@ -11,12 +11,12 @@ object BrainfuckCompiler {
 
   val TEMPLATE_PROG =
     """
-      |SET J, 10000
-      |{CODE}
-      |SET PC, end
+      | SET J, 10000
+      | {CODE}
+      | SET PC, end
       |
-      |:end
-      |SET PC, end
+      | :end
+      | SET PC, end
     """.stripMargin
 
   val assemblerFunctions = Map(">" -> "ADD J, 1",
