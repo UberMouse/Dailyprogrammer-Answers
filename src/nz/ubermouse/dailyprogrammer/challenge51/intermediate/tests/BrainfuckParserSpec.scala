@@ -57,7 +57,13 @@ class BrainfuckParserSpec extends WordSpec {
     }
 
     "optimize and parse complex expressions" in {
-      expect("List(DataAdd(1), ")
+      expect("List(DataAdd(1), PtrAdd(1), DataAdd(5), PtrAdd(3), DataSub(10))") {
+        BrainfuckParser("+>+++++>>>----------").toString()
+      }
+
+      expect("List(PtrAdd(5), DataAdd(2), DataSub(1), DataAdd(2), DataSub(1), DataAdd(1), DataSub(1), DataAdd(1), DataSub(1), DataAdd(1), PtrSub(4), PtrAdd(2), DataSub(2), DataAdd(1))") {
+        BrainfuckParser(">>>>>++-++-+-+-+<<<<>>--+").toString()
+      }
     }
   }
 }

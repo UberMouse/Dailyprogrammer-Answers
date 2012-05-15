@@ -39,25 +39,25 @@ object BrainfuckParser {
     val (parsedNode, newOffset) = code.substring(offset, offset + 1) match {
       case ">" => {
         val length = makeRegex(">").findFirstMatchIn(code.substring(offset)).get.group(1).length
-        (new PtrAdd(length), offset + length - 1)
+        (new PtrAdd(length), offset + length)
       }
       case "<" => {
         val length = makeRegex("<").findFirstMatchIn(code.substring(offset)).get.group(1).length
-        (new PtrSub(length), offset + length - 1)
+        (new PtrSub(length), offset + length)
       }
       case "+" => {
         val length = makeRegex("\\+").findFirstMatchIn(code.substring(offset)).get.group(1).length
-        (new DataAdd(length), offset + length - 1)
+        (new DataAdd(length), offset + length)
       }
       case "-" => {
         val length = makeRegex("-").findFirstMatchIn(code.substring(offset)).get.group(1).length
-        (new DataSub(length), offset + length - 1)
+        (new DataSub(length), offset + length)
       }
-      case "." => (new PrintChar(), offset)
-      case "," => (new ReadChar(), offset)
+      case "." => (new PrintChar(), offset + 1)
+      case "," => (new ReadChar(), offset + 1)
     }
     val updatedNodeList = parsedSyntax ++ List(parsedNode)
-    if (code.length - 1 == newOffset)
+    if (code.length - 1 == newOffset-1)
       updatedNodeList
     else
       parse(code, newOffset, updatedNodeList)
