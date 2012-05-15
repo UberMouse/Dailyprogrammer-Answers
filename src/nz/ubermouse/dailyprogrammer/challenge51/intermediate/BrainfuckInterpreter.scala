@@ -57,7 +57,6 @@ object BrainfuckInterpreter {
             val (jumpPoint, newStack) = (stack.head, stack.pop)
             val backJump = (offset, jumpPoint)
             val forwardJump = (jumpPoint, offset)
-            println(backJump, forwardJump)
             (map + backJump + forwardJump, newStack)
           }
           case _ => (map, stack)
