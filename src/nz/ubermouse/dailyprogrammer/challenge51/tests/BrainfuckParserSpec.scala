@@ -38,7 +38,6 @@ class BrainfuckParserSpec extends WordSpec {
     override def read(b:Array[Byte], offset:Int, len:Int) = read()
   }
   val output = new ListBuffer[String]
-  Console.setOut(outStream)
   Console.setIn(inputStream)
 
 
@@ -88,6 +87,8 @@ class BrainfuckParserSpec extends WordSpec {
     }
 
     "the ability to output an ASCII character using the value the current DataPointer refers to with ." in {
+      val oldOut = Console.out
+      Console.setOut(outStream)
       expect("!") {
         output.clear()
         BrainfuckParser("+++++++++++++++++++++++++++++++++.")
@@ -99,6 +100,7 @@ class BrainfuckParserSpec extends WordSpec {
         BrainfuckParser("++++++++++++++++++++++++++++++++++++++++++++++++.")
         output(0)
       }
+      Console.setOut(oldOut)
     }
 
     "the ability to store a byte of input at the current Data Pointer with ," in {

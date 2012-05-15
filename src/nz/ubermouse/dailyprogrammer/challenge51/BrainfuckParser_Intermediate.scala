@@ -1,6 +1,7 @@
 package nz.ubermouse.dailyprogrammer.challenge51
 
-import collection.immutable.HashMap
+import collection.immutable.{Stack, HashMap}
+
 
 /**
  * Created by IntelliJ IDEA.
@@ -41,36 +42,36 @@ object BrainfuckParser_Intermediate {
                                    }))
   var jumps: Map[Int, Int]   = new HashMap[Int, Int]
 
-  def findJumps(code: String): Map[Int, Int] = {
-    var map = new HashMap[Int, Int]
-    def findMatchingJump(index: Int, offset: Int = 0): Int = {
-      String.valueOf(code(index)) match {
-        case "[" => {
-          val nextLeftBracket = code.indexOf("[", index + offset + 1)
-          val nextRightBracket = code.indexOf("]", index + offset + 1)
-          if (nextLeftBracket > nextRightBracket || nextLeftBracket == -1)
-            nextRightBracket
-          else
-            findMatchingJump(index, nextRightBracket - index)
-        }
-        case "]" => {
-          for ((k, v) <- map) {
-            if (v == index)
-              return k
-          }
-          -1
-        }
-      }
-    }
-    for (i <- 0 until code.length) {
-      val char = code(i)
-      if (String.valueOf(char) == "[") map += i -> findMatchingJump(i)
-      else if (String.valueOf(char) == "]") map += i -> findMatchingJump(i)
-    }
-    map
+  def main(args: Array[String]) {
+    apply("++++++++++[>>++++++>+++++++++++>++++++++++>+++++++++>+++>+++++>++++>++++++++>+[<]<-]>>+++++++.>+.-.>+++.<++++.>>+++++++.<<++.+.>+++++.>.<<-.>---.<-----.-.+++++.>>>+++.-.<<-.<+..----.>>>>++++++++.>+++++++..<<<<+.>>>>-.<<<<.++++.------.<+++++.---.>>>>>.<<<++.<<---.>++++++.>>>>+.<<<-.--------.<<+.>>>>>>+++.---.<-.<<<<---.<.>---.>>>>>>.")
   }
 
-  def apply(code: String) = {
+  def findJumps(code: String): Map[Int, Int] = {
+    def recursiveWrapper(code: String, offset: Int = 0,
+                         map: Map[Int, Int] = new HashMap[Int, Int],
+                         stack: Stack[Int] = new Stack[Int]): (Map[Int, Int], Stack[Int]) = {
+      if (code.length == 1 || offset == code.length - 1) {
+        String.valueOf(code.last) match {
+          case "[" => (map, stack push offset)
+          case "]" => {
+            val (jumpPoint, newStack) = (stack.head, stack.pop)
+            val backJump = (offset, jumpPoint)
+            val forwardJump = (jumpPoint, offset)
+            println(backJump, forwardJump)
+            (map + backJump + forwardJump, newStack)
+          }
+          case _ => (map, stack)
+        }
+      }
+      else {
+        val (newMap, newStack) = recursiveWrapper(code.substring(offset, offset + 1), offset, map, stack)
+        recursiveWrapper(code, offset + 1, newMap, newStack)
+      }
+    }
+    recursiveWrapper(code)._1
+  }
+
+  def apply(code: String, mode: Int = 0) = {
     jumps = findJumps(code)
     cells = Array.fill(MEMORY_SIZE)(0)
     parse(code.replaceAll(" ", ""))
