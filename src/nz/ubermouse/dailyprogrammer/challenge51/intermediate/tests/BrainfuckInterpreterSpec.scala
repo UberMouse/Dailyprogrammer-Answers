@@ -3,7 +3,7 @@ package nz.ubermouse.dailyprogrammer.challenge51.intermediate.tests
 import org.scalatest.WordSpec
 import java.io.{InputStream, OutputStream, PrintStream}
 import collection.mutable.{Queue, ListBuffer}
-import nz.ubermouse.dailyprogrammer.challenge51.intermediate.{BrainfuckInterpreter => BrainfuckParser}
+import nz.ubermouse.dailyprogrammer.challenge51.intermediate.BrainfuckInterpreter
 
 /**
  * Created by IntelliJ IDEA.
@@ -47,45 +47,45 @@ class BrainfuckInterpreterSpec extends WordSpec {
   "The Brainfuck Interpreter" should support {
     "incrementing the Data Pointer with >" in {
       expect(1) {
-        BrainfuckParser(">")._1
+        BrainfuckInterpreter(">")._1
       }
 
       expect(5) {
-        BrainfuckParser(">>>>>")._1
+        BrainfuckInterpreter(">>>>>")._1
       }
     }
 
     "decrementing the Data Pointer with <" in {
       expect(1) {
-        BrainfuckParser(">><")._1
+        BrainfuckInterpreter(">><")._1
       }
 
       expect(5) {
-        BrainfuckParser(">>>>>>><<")._1
+        BrainfuckInterpreter(">>>>>>><<")._1
       }
     }
 
     "incrementing the byte at the current Data Pointer with +" in {
       expect(1) {
-        BrainfuckParser("+")
-        BrainfuckParser.cells(0)
+        BrainfuckInterpreter("+")
+        BrainfuckInterpreter.cells(0)
       }
 
       expect(5) {
-        BrainfuckParser("+++++")
-        BrainfuckParser.cells(0)
+        BrainfuckInterpreter("+++++")
+        BrainfuckInterpreter.cells(0)
       }
     }
 
     "decrementing the byte at the current Data Pointer with -" in {
       expect(-1) {
-       BrainfuckParser("-")
-       BrainfuckParser.cells(0)
+       BrainfuckInterpreter("-")
+       BrainfuckInterpreter.cells(0)
      }
 
       expect(-5) {
-       BrainfuckParser("-----")
-       BrainfuckParser.cells(0)
+       BrainfuckInterpreter("-----")
+       BrainfuckInterpreter.cells(0)
      }
     }
 
@@ -94,13 +94,13 @@ class BrainfuckInterpreterSpec extends WordSpec {
       Console.setOut(outStream)
       expect("!") {
         output.clear()
-        BrainfuckParser("+++++++++++++++++++++++++++++++++.")
+        BrainfuckInterpreter("+++++++++++++++++++++++++++++++++.")
         output(0)
       }
 
       expect("0") {
         output.clear()
-        BrainfuckParser("++++++++++++++++++++++++++++++++++++++++++++++++.")
+        BrainfuckInterpreter("++++++++++++++++++++++++++++++++++++++++++++++++.")
         output(0)
       }
       Console.setOut(oldOut)
@@ -108,50 +108,39 @@ class BrainfuckInterpreterSpec extends WordSpec {
 
     "the ability to store a byte of input at the current Data Pointer with ," in {
       expect("!") {
-        //BrainfuckParser(",.")
+        //BrainfuckInterpreter(",.")
         //output(0)
         pending
       }
 
       expect("0") {
-        //BrainfuckParser(",.")
+        //BrainfuckInterpreter(",.")
         //output(0)
         pending
       }
     }
 
-    "being able to find all jump points in the code" in {
-      expect(Map(6 -> 2, 2 -> 6)) {
-        BrainfuckParser.findJumps("++[++-]--")
-      }
-
-      expect(Map(24 -> 19, 16 -> 8, 11 -> 15, 8 -> 16, 19 -> 24, 15 -> 11)) {
-        BrainfuckParser
-        .findJumps(">>+<-->+[++[-->]]--[<<<+]")
-      }
-    }
-
     "forward command jumping to after the next ] with [ on a 0 byte pointer" in {
       expect(1) {
-        BrainfuckParser("[+++++]+")
-        BrainfuckParser.cells(0)
+        BrainfuckInterpreter("[+++++]+")
+        BrainfuckInterpreter.cells(0)
       }
 
-      expect(5) {
-        BrainfuckParser("[+++++]++[++>]<+")
-        BrainfuckParser.cells(0)
+      expect(4) {
+        BrainfuckInterpreter("[+++++]++[++>]+")
+        BrainfuckInterpreter.cells(0)
       }
     }
 
     "backward command jumping to the previous [ with ] on a positive byte pointer" in {
       expect(11) {
-       BrainfuckParser("+>++[<+++++>-]+")
-       BrainfuckParser.cells(0)
+       BrainfuckInterpreter("+>++[<+++++>-]+")
+       BrainfuckInterpreter.cells(0)
      }
 
       expect(8) {
-        BrainfuckParser("+>++[<+++++>-]++>+++[<++>-]+")
-        BrainfuckParser.cells(1)
+        BrainfuckInterpreter("+>++[<+++++>-]++>+++[<++>-]+")
+        BrainfuckInterpreter.cells(1)
       }
     }
   }

@@ -36,9 +36,13 @@ class BrainfuckParserSpec extends WordSpec {
       expect("List(ReadChar())") {
         BrainfuckParser(",").toString()
       }
+
+      expect("List(ForwardJump(1), BackJump(0))") {
+        BrainfuckParser("[]").toString()
+      }
     }
 
-    "optimize away multiples of the same expression into one" in {
+    "optimize away multiples of the same expression into one (where applicable)" in {
       expect("List(PtrAdd(5))") {
         BrainfuckParser(">>>>>").toString()
       }
@@ -63,6 +67,23 @@ class BrainfuckParserSpec extends WordSpec {
 
       expect("List(PtrAdd(5), DataAdd(2), DataSub(1), DataAdd(2), DataSub(1), DataAdd(1), DataSub(1), DataAdd(1), DataSub(1), DataAdd(1), PtrSub(4), PtrAdd(2), DataSub(2), DataAdd(1))") {
         BrainfuckParser(">>>>>++-++-+-+-+<<<<>>--+").toString()
+      }
+    }
+
+    "find all jump points in the code" in {
+      expect(Map(1 -> 4, 4 -> 1)) {
+        BrainfuckParser.findJumps("++[++-]--".replaceAll(">+", ">")
+                            .replaceAll("<+", "<")
+                            .replaceAll("\\++", "+")
+                            .replaceAll("-+", "-"))
+      }
+
+      expect(Map(14 -> 17, 6 -> 12, 17 -> 14, 12 -> 6, 11 -> 8, 8 -> 11)) {
+        BrainfuckParser
+        .findJumps(">>+<-->+[++[-->]]--[<<<+]".replaceAll(">+", ">")
+                            .replaceAll("<+", "<")
+                            .replaceAll("\\++", "+")
+                            .replaceAll("-+", "-"))
       }
     }
   }
